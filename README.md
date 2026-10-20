@@ -156,6 +156,31 @@ and Windows.
 
 While you develop, add the folder by local path: `/plugin marketplace add ./xien-flow`.
 
+## Testing a local copy
+
+If you installed the live market source, remove it first to avoid issues:
+
+    /plugin uninstall xien-flow@xien-flow
+    /plugin marketplace remove xien-flow
+
+Then add the local folder and install it. Use the absolute path of the folder that
+contains `.claude-plugin`:
+
+    /plugin marketplace add /abs/path/to/xien-flow
+    /plugin install xien-flow@xien-flow
+
+Restart the session after installing.
+
+`marketplace add` only registers the folder. You must still run the install command.
+
+While you develop from the local folder, you do not need to update, reinstall or
+raise the version. Edit the files. A new session reads the change. In an open
+session, run `/reload-plugins` or restart it.
+
+To go back to the GitHub copy, remove the local one with the two commands above,
+then follow the Install section. If you move or rename the folder, remove the
+local copy and add it again from the new path.
+
 ## Layout
 
     .claude-plugin/
