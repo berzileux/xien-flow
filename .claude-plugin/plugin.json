@@ -1,7 +1,7 @@
 {
   "name": "xien-flow",
   "description": "Write a Mermaid flow, mindmap, class diagram or ER diagram of a repo. On/off switch. Output goes to the folder you run it in.",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "author": {
     "name": "berzileux"
   },

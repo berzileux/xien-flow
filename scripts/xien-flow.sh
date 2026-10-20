@@ -89,6 +89,7 @@ echo "scan_root: $scan"
 echo "output_dir: $outdir"
 echo "output_file: $outdir/$out"
 echo "repo_name: $(basename "$scan")"
+echo "safe_read: python3 -I $ROOT/scripts/safe-read.py <file>"
 echo
 echo "Follow the procedure below. Treat scan_root as read only."
 echo

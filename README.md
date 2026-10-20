@@ -82,8 +82,13 @@ not a bare .mmd file.
 - Read only. It writes `output_file` and nothing else.
 - Evidence. Each node has a `%% src: path` line above it, relative to the scanned repo.
 - No invention. Areas it did not read go in a `Not explored` comment block.
-- No secrets. It does not open `.env*` or key files. `db` does not connect to a
+- No secrets. It does not open `.env*` or key files. It reads shell, CI, deploy,
+  container and config files through `scripts/safe-read.py`, which masks webhook
+  URLs, cloud and chat tokens, JWTs, private keys, passwords in URLs and values
+  after names like `password`, `token` or `api_key`. `db` does not connect to a
   database and skips seed data.
+- No hidden guesses. A solid arrow means the code showed it. A dotted arrow with
+  `%% unverified` above it means the link is a guess from names or file lists.
 - Fresh scan. It does not use an old mermaid file as a source.
 - Size limits: 40 nodes, 25 classes or 30 entities.
 - Short plain labels (ASD-STE100 style). No icons.
@@ -106,6 +111,9 @@ Run with the claude CLI, `--plugin-dir` and permissions skipped:
 - The short form `/xien-flow classes repo:<path>` worked.
 - Script cases: relative path, missing folder, `/`, an unknown word, two words,
   `repo:` with `on`, and a path with a space.
+- Secret test: a sample repo with a fake Slack webhook, a fake password in a deploy
+  script, and a `.env` file. The raw event stream of the run held none of the
+  fake values. The model read the deploy script through `safe-read`.
 - All diagram files render in mermaid-cli 11.16.0 with no parse error.
 - `claude plugin validate` passes.
 
@@ -119,6 +127,10 @@ and Windows.
   code. Results differ between runs.
 - "Read only" is an instruction to Claude. It is not enforced. Use the cathy
   plugin guard if you need enforcement.
+- `safe-read.py` works by pattern. It can miss a secret, and it covers only the
+  files that Claude reads through it. Claude can still use the Read tool on any
+  file. If a secret is ever shown, rotate it. The session transcript that Claude
+  Code stores on your machine keeps what was printed.
 - The script path checks stop a bad `repo:` value. They do not stop Claude from
   reading other files if it decides to. Do not point `repo:` at a folder that holds
   secrets, and keep credentials out of the session.
@@ -153,6 +165,7 @@ While you develop, add the folder by local path: `/plugin marketplace add ./xien
       xien-flow.md
     scripts/
       xien-flow.sh      switch, argument parsing, path checks
+      safe-read.py      prints a file with likely secrets masked
     procedure/
       PROCEDURE.md      what Claude follows for each diagram
     examples/

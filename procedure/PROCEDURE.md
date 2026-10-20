@@ -28,7 +28,14 @@ It is a generated file.
 3. No invention. If you did not read an area, do not draw it.
    Put it in the Not explored list instead.
 4. Keep secrets out. Do not open `.env*`, key files or credential files.
-   Do not copy any secret value into the diagram.
+   Read every shell, CI, deploy, container, infra and config file with `safe_read`
+   from the header, not with the Read tool. Examples: `*.sh`, `Jenkinsfile`,
+   `Dockerfile`, `*.yml`, `*.yaml`, `docker-compose*`, `*.tf`, `Makefile`,
+   `*.properties`, `*.ini`, `*.conf`, `*.json` config files.
+   Use the Read tool only for source code. If a secret still shows in any output,
+   do not repeat it. Name the file and the kind of secret in the report, and say
+   the person should rotate it. Do not copy any secret value into the diagram.
+   `safe_read` masks by pattern. It can miss a secret. Treat it as best effort.
 5. Plain text. No emoji and no icons. Labels use short, plain words.
    Use ASD-STE100 style: simple words, one idea per label, active verbs.
 6. Fresh scan. Do not read any `mermaid*.mmd` file as a source.
@@ -60,7 +67,10 @@ It is a generated file.
   - `[(Name)]` for storage (file, database, cache)
   - `([Name])` for an entry point or trigger
   - `{{Name}}` for an outside system (API, service, user)
-- Draw an arrow only for a real call, import, read or write that you saw.
+- Draw a solid arrow only for a real call, import, read or write that you saw in code.
+  If a link is a guess from a folder name or a file list, use a dotted arrow `-.->`
+  and put `%% unverified` on the line above it. Do not draw it as solid.
+  Never hide a guess.
   Label an arrow with a verb when the meaning is not clear: `A -->|reads| B`.
 - Use node ids that are short and plain: `cli`, `parser`, `db`. No spaces.
 - Put a label in double quotes when it has `(`, `)`, `/`, `:` or `<`.
@@ -126,6 +136,7 @@ mindmap
   - `A *-- B` A owns B and B has no life without A
   - `A o-- B` A holds a B that lives on its own
   - `A --> B` A uses B. Label it: `A --> B : calls`
+  - `A ..> B` a guess. Add `%% unverified` on the line above.
 - Put a `%% src: path` line above each `class` block.
 - At most 25 classes. If the repo has more, pick the core ones and name the
   rest in Not explored.
@@ -201,12 +212,12 @@ erDiagram
 ## Check list before you write
 
 - Each node has a `%% src:` line and the path exists. Check with `ls` or a glob.
-- Each arrow matches a call you saw in a file.
+- Each solid arrow matches a call you saw in a file. Each guess is dotted and tagged `%% unverified`.
 - No node id is repeated. No id has a space.
 - Labels with special characters are in double quotes.
 - The count is within the limit: 40 nodes, 25 classes or 30 entities.
 - Every class member and every column was seen in a file.
-- Every relation has a code or schema line behind it.
+- Every relation has a code or schema line behind it. Guesses are dotted and tagged `%% unverified`.
 - No secret value appears in the file.
 - The Not explored block lists every area you skipped.
 
