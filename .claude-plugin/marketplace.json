@@ -1,0 +1,14 @@
+{
+  "name": "xien-flow",
+  "description": "xien-flow: write Mermaid diagrams of a repository, with evidence for every box.",
+  "owner": {
+    "name": "berzileux"
+  },
+  "plugins": [
+    {
+      "name": "xien-flow",
+      "source": "./",
+      "description": "Write mermaid.mmd (flow), mindmap, class or ER diagrams of a repo. /xien-flow on|off|status. Every box cites a real file."
+    }
+  ]
+}

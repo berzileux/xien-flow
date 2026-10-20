@@ -1,0 +1,33 @@
+---
+title: rf2 classes
+---
+classDiagram
+    %% src: app/models.py
+    class Base {
+        save()
+    }
+    %% src: app/models.py
+    class User {
+        email
+        orders
+        add_order(order)
+    }
+    %% src: app/models.py
+    class Order {
+        user
+        total
+        pay()
+    }
+    %% src: app/models.py
+    class Store {
+        path
+        load()
+    }
+    Base <|-- User
+    Base <|-- Order
+    User o-- Order : holds orders
+    Order --> User : refers to user
+
+%% Not explored:
+%% - db/001_init.sql (SQL schema, no classes)
+%% - db/seed.sql (data, skipped on purpose)

@@ -1,0 +1,28 @@
+---
+title: rf2 database
+---
+erDiagram
+    %% src: db/001_init.sql
+    USERS {
+        int id PK
+        string email UK
+    }
+    %% src: db/001_init.sql
+    ORDERS {
+        int id PK
+        int user_id FK
+        numeric total
+    }
+    %% src: db/001_init.sql
+    ORDER_ITEMS {
+        int id PK
+        int order_id FK
+        string sku
+    }
+    USERS ||--o{ ORDERS : "places"
+    %% check: order_id can be null, so an item may have no order
+    ORDERS |o--o{ ORDER_ITEMS : "has"
+
+%% Not explored:
+%% - db/seed.sql (data, skipped on purpose)
+%% - app/models.py (Python classes, not a schema source)

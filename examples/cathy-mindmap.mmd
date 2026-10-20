@@ -1,0 +1,41 @@
+mindmap
+  root((cathy))
+    Package
+      %% src: .claude-plugin/plugin.json
+      plugin.json names the plugin
+      %% src: .claude-plugin/marketplace.json
+      marketplace.json lists the plugin
+      %% src: hooks/hooks.json
+      hooks.json sets two hooks
+    Switch
+      %% src: commands/cathy.md
+      cathy.md is the slash command
+      %% src: scripts/cathy.sh
+      cathy.sh writes the mode file
+      cathy.sh prints the rules when on
+    Rules
+      %% src: rules/FOUNDATIONS.md
+      FOUNDATIONS.md holds the principles
+      %% src: scripts/inject.sh
+      inject.sh prints rules at session start
+    Guard
+      %% src: scripts/guard.sh
+      guard.sh checks the mode
+      guard.sh blocks if python3 is missing
+      %% src: scripts/guard.py
+      guard.py checks Bash commands
+      guard.py checks file paths
+      guard.py protects its own files
+      %% src: guard/blocklist.txt
+      blocklist.txt lists blocked commands
+      %% src: guard/protected-paths.txt
+      protected-paths.txt lists protected paths
+    Docs
+      %% src: README.md
+      README.md explains install and use
+
+%% Not explored:
+%% - rules/FOUNDATIONS.md after line 60 (principles P3 onward, language notes)
+%% - scripts/guard.py body (read only a part; the check logic was listed, not traced)
+%% - mermaid.mmd (older generated flow file, not used as a source)
+%% - the mode file in the user config folder (outside the repo)

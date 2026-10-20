@@ -1,0 +1,97 @@
+---
+title: cathy flow
+---
+flowchart TD
+    subgraph pkg[Plugin package]
+        %% src: .claude-plugin/plugin.json
+        plugin[Plugin manifest]
+        %% src: .claude-plugin/marketplace.json
+        market[Marketplace list]
+        %% src: hooks/hooks.json
+        hooks[Hook config]
+    end
+
+    subgraph trig[Triggers]
+        %% src: commands/cathy.md
+        slash([Slash command cathy])
+        %% src: hooks/hooks.json
+        sstart([SessionStart event])
+        %% src: hooks/hooks.json
+        pretool([PreToolUse event])
+    end
+
+    subgraph sw[Mode switch]
+        %% src: scripts/cathy.sh
+        cathy[cathy.sh sets mode]
+        %% src: scripts/inject.sh
+        inject[inject.sh prints rules]
+    end
+
+    subgraph gd[Guard]
+        %% src: scripts/guard.sh
+        gsh[guard.sh checks mode]
+        %% src: scripts/guard.py
+        gpy[guard.py checks action]
+        %% src: scripts/guard.py
+        selfp[Self protection check]
+        %% src: scripts/guard.py
+        cmdchk[Command check]
+        %% src: scripts/guard.py
+        pathchk[Path check]
+    end
+
+    subgraph cfg[Guard lists]
+        %% src: guard/blocklist.txt
+        blist[(blocklist.txt)]
+        %% src: guard/protected-paths.txt
+        plist[(protected-paths.txt)]
+    end
+
+    subgraph rules[Rules]
+        %% src: rules/FOUNDATIONS.md
+        found[(FOUNDATIONS.md 13 principles)]
+    end
+
+    subgraph state[State]
+        %% src: scripts/cathy.sh
+        mode[("~/.config/cathy/mode")]
+    end
+
+    subgraph out[Outside]
+        %% src: README.md
+        user{{Human user}}
+        %% src: README.md
+        claude{{Claude Code session}}
+    end
+
+    user -->|types| slash
+    slash -->|runs| cathy
+    cathy -->|writes| mode
+    cathy -->|prints| found
+    cathy -->|output to| claude
+
+    hooks -->|defines| sstart
+    hooks -->|defines| pretool
+    plugin -.-> hooks
+    market -.->|lists| plugin
+
+    sstart --> inject
+    inject -->|reads| mode
+    inject -->|prints| found
+    inject -->|output to| claude
+
+    pretool --> gsh
+    gsh -->|reads| mode
+    gsh -->|mode on| gpy
+    gpy --> selfp
+    gpy --> cmdchk
+    gpy --> pathchk
+    cmdchk -->|reads| blist
+    pathchk -->|reads| plist
+    selfp -->|blocks edits to| mode
+    gpy -->|exit 2 blocks| claude
+
+%% Not explored:
+%% - rules/FOUNDATIONS.md body (only headings read, not the full text of each principle)
+%% - guard/blocklist.txt and guard/protected-paths.txt (only the first lines read, not every entry)
+%% - README.md claims about tests (69 unit cases): no test files exist in the repo
