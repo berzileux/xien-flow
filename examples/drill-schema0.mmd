@@ -1,0 +1,82 @@
+---
+title: rf5 flow
+---
+flowchart TD
+    %% scan_root: /tmp/claude-0/-home-claude/07c45f5a-1959-5c71-bd6d-c3972228dae2/scratchpad/rf5
+    %% area: A1 | src/index.js, src/App.js, src/routers/index.js | App start
+    subgraph start[App start]
+        %% src: src/index.js
+        idx([index.js entry])
+        %% src: src/App.js
+        app[App]
+        %% src: src/routers/index.js
+        router[Router]
+    end
+    %% area: A2 | src/components/session | Session
+    subgraph sess[Session]
+        %% src: src/components/session/Login.js
+        login[Login]
+    end
+    %% area: A3 | src/components/properties | Properties UI
+    subgraph prop[Properties UI]
+        %% src: src/components/properties/List.js
+        plist[Property List]
+        %% src: src/components/properties/Row.js
+        prow[Property Row]
+    end
+    %% area: A4 | src/components/realtors | Realtors UI
+    subgraph real[Realtors UI]
+        %% src: src/components/realtors/List.js
+        rlist[Realtor List]
+    end
+    %% area: A5 | src/store | Store and actions
+    subgraph store[Store and actions]
+        %% src: src/store/index.js
+        sidx[Store]
+        %% src: src/store/reducers.js
+        red[Reducers]
+        %% src: src/store/actions/propertyActions.js
+        pact[Property actions]
+        %% src: src/store/actions/realtorActions.js
+        ract[Realtor actions]
+    end
+    %% area: A6 | src/utils | Utilities
+    subgraph util[Utilities]
+        %% src: src/utils/fetchHandler.js
+        fh[fetchHandler]
+        %% src: src/utils/format.js
+        fmt[format]
+    end
+    %% area: A7 | deploy.sh | Deploy
+    subgraph dep[Deploy]
+        %% src: deploy.sh
+        deploy([deploy.sh])
+    end
+    %% src: src/utils/fetchHandler.js
+    api{{api.example.com}}
+    %% src: deploy.sh
+    hook{{Deploy webhook}}
+    %% src: src/utils/fetchHandler.js
+    ls[(Browser localStorage token)]
+
+    idx -->|wraps with store| sidx
+    idx --> app
+    app --> router
+    router --> login
+    router --> plist
+    router --> rlist
+    sidx --> red
+    plist --> pact
+    plist --> prow
+    plist --> fmt
+    rlist --> ract
+    pact --> fh
+    ract --> fh
+    login --> fh
+    fh -->|reads token| ls
+    fh -->|calls| api
+    deploy -->|posts to| hook
+
+%% Not explored:
+%% - No folders skipped. All 14 files were read.
+%% - deploy.sh holds a masked webhook URL. Rotate it if it is a secret.

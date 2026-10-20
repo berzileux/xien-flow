@@ -1,0 +1,34 @@
+---
+title: rf5 / Properties UI (drill A3)
+---
+flowchart TD
+    %% scan_root: /tmp/claude-0/-home-claude/07c45f5a-1959-5c71-bd6d-c3972228dae2/scratchpad/rf5
+    %% drill_of: A3
+    subgraph prop[Properties UI]
+        %% src: src/components/properties/List.js
+        plist["List component (List.js)"]
+        %% src: src/components/properties/List.js
+        dsp["dispatch call (not imported in List.js)"]
+        %% src: src/components/properties/Row.js
+        prow["Row component (Row.js)"]
+    end
+    %% src: src/routers/index.js
+    router[Router]
+    %% src: src/store/actions/propertyActions.js
+    pact[Property actions]
+    %% src: src/utils/format.js
+    fmt[format]
+
+    router -->|imports| plist
+    plist -->|calls loadProperties| dsp
+    dsp -->|passes action from| pact
+    plist -->|imports and returns| prow
+    plist -->|imports, not used| fmt
+
+    classDef ext stroke-dasharray: 4 3
+    class router,pact,fmt ext
+
+%% Not explored:
+%% - No folder skipped. Both files in src/components/properties were read.
+%% - Schema 0 arrow plist to pact: confirmed (import and call of loadProperties).
+%% - List.js calls dispatch, but it has no import for dispatch. Store link not drawn.

@@ -8,7 +8,7 @@
     {
       "name": "xien-flow",
       "source": "./",
-      "description": "Write mermaid.mmd (flow), mindmap, class or ER diagrams of a repo. /xien-flow on|off|status. Every box cites a real file."
+      "description": "Write mermaid.mmd (flow), mindmap, class or ER diagrams of a repo. /xien-flow:run on|off|status. Every box cites a real file."
     }
   ]
 }

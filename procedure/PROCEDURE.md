@@ -56,12 +56,22 @@ It is a generated file.
    output, config, tests, tooling).
 5. Draw the flow. See the shape rules below.
 6. Check the diagram. See the check list below.
-7. Write `output_file`. Report the path, the count and the Not explored list.
+7. Write `output_file`. Run `lint` from the header on it. Fix every problem it lists
+   and write the file again, until it prints `LINT OK`.
+   Then report the path, the count and the Not explored list.
 
 ## Shape rules for `flow`
 
 - Start the file with the front matter title, then `flowchart TD`.
+- On the line after `flowchart TD`, write the scan root so that `drill` can find it:
+  `%% scan_root: <scan_root from the header>`
 - Use `subgraph` for each area. Give each subgraph a short title.
+- Draw 4 to 10 areas. Above each `subgraph`, write one area tag:
+  `%% area: A1 | path/one, path/two | Short label`
+  The id is `A1`, `A2` and so on. The paths are real files or folders, relative to
+  `scan_root`, separated by commas. The label matches the subgraph title.
+  A later `/xien-flow:run drill` reads these tags, so write them exactly in this form.
+  Use one tag for each subgraph, and no tag for the outside-systems group.
 - Use these node shapes:
   - `[Name]` for code or a module
   - `[(Name)]` for storage (file, database, cache)
@@ -73,6 +83,9 @@ It is a generated file.
   Never hide a guess.
   Label an arrow with a verb when the meaning is not clear: `A -->|reads| B`.
 - Use node ids that are short and plain: `cli`, `parser`, `db`. No spaces.
+  Never use a Mermaid keyword as an id: `end`, `call`, `click`, `style`, `class`,
+  `default`, `graph`, `subgraph`, `direction`, `href`, `classDef`, `linkStyle`.
+  Start each id with `n_` if you are not sure: `n_call`, `n_end`.
 - Put a label in double quotes when it has `(`, `)`, `/`, `:` or `<`.
   Example: `cfg["config/app.yaml"]`.
 - End the file with a comment block named Not explored.
@@ -84,8 +97,10 @@ Template:
 title: <scan_root folder name> flow
 ---
 flowchart TD
+    %% scan_root: /abs/path/to/repo
     %% src: bin/cli.js
     cli([CLI entry])
+    %% area: A1 | src/parse.js | Core logic
     subgraph core[Core logic]
         %% src: src/parse.js
         parse[Parse input]
